@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
+// pages
 import 'package:jo/pages/home.dart';
+import 'package:jo/pages/works.dart';
 
 import './pages/app_bar.dart';
 
@@ -40,16 +43,13 @@ class MyAppJO extends StatelessWidget {
                   (MediaQuery.sizeOf(context).width < mobileSizeJO.width)
                       ? 0
                       : 75),
-          child: Column(
+          child: const Column(
             children: [
-              const HomePageJO(),
-              LineSeparatorPagesJO(
-                key: GlobalKey(debugLabel: 'jdj'),
-                'works',
-              ),
-              const LineSeparatorPagesJO('about me'),
-              const LineSeparatorPagesJO('contact me'),
-              ...List.generate(100, (index) => const Text('data')),
+              HomePageJO(),
+              LineSeparatorPagesJO('works'),
+              WorksPageJO(),
+              LineSeparatorPagesJO('about me'),
+              LineSeparatorPagesJO('contact me'),
             ],
           ),
         ),
@@ -58,7 +58,7 @@ class MyAppJO extends StatelessWidget {
   }
 }
 
-class LineSeparatorPagesJO extends StatelessWidget {
+class LineSeparatorPagesJO extends StatefulWidget {
   const LineSeparatorPagesJO(
     this.text, {
     super.key,
@@ -67,52 +67,81 @@ class LineSeparatorPagesJO extends StatelessWidget {
   final String text;
 
   @override
+  State<LineSeparatorPagesJO> createState() => _LineSeparatorPagesJOState();
+}
+
+class _LineSeparatorPagesJOState extends State<LineSeparatorPagesJO> {
+  Color color = theme.colorScheme.secondary;
+
+  void colorToggle(bool toggled) {
+    setState(() {
+      color = (toggled)
+          ? theme.colorScheme.onSecondary
+          : theme.colorScheme.secondary;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal:
-            (MediaQuery.sizeOf(context).width < mobileSizeJO.width) ? 75 : 0,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          RichText(
-            text: TextSpan(
-              style: TextStyle(
-                fontSize: 30,
-                fontFamily: Theme.of(context).textTheme.labelLarge?.fontFamily,
-              ),
-              children: [
-                TextSpan(
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                  text: '# ',
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 20),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal:
+              (MediaQuery.sizeOf(context).width < mobileSizeJO.width) ? 75 : 0,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  fontSize: 30,
+                  fontFamily:
+                      Theme.of(context).textTheme.labelLarge?.fontFamily,
                 ),
-                TextSpan(text: text),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: CustomPaint(
-                size: const Size(1, 1),
-                painter: LineSeparatorJOPainter(),
+                children: [
+                  TextSpan(
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    text: '# ',
+                  ),
+                  TextSpan(text: widget.text),
+                ],
               ),
             ),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: const Row(
-              children: [
-                Text('View all'),
-                SizedBox(width: 10),
-                Icon(Icons.arrow_right_alt_sharp),
-              ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: CustomPaint(
+                  size: const Size(1, 1),
+                  painter: LineSeparatorJOPainter(),
+                ),
+              ),
             ),
-          ),
-        ],
+            TextButton(
+              onHover: colorToggle,
+              onPressed: () {},
+              child: Row(
+                children: [
+                  Text(
+                    'View all',
+                    style: TextStyle(
+                      color: color,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Icon(
+                    Icons.arrow_right_alt_sharp,
+                    color: color,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -55,6 +55,7 @@ final ThemeData theme = ThemeData(
       overlayColor: WidgetStatePropertyAll(Colors.transparent),
       shape: WidgetStatePropertyAll(LinearBorder.none),
       padding: WidgetStatePropertyAll(EdgeInsets.only(left: 50)),
+      animationDuration: Duration.zero,
     ),
   ),
 );
