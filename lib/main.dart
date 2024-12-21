@@ -124,37 +124,37 @@ class _LineSeparatorPagesJOState extends State<LineSeparatorPagesJO> {
                 painter: LineSeparatorJOPainter(),
               ),
             ),
-            TextButton(
-              onHover: colorToggle,
-              onPressed: () {},
-              child: Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      right: (MediaQuery.sizeOf(context).width <
-                              mobileSizeJO.width)
-                          ? 0
-                          : 10,
-                      left: 20,
-                    ),
-                    child:
-                        (MediaQuery.sizeOf(context).width < mobileSizeJO.width)
-                            ? const Text('')
-                            : Text(
-                                'View all',
-                                style: TextStyle(
-                                  color: color,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                  ),
-                  Icon(
-                    Icons.arrow_right_alt_sharp,
-                    color: color,
-                  ),
-                ],
-              ),
-            ),
+            // TextButton(
+            //   onHover: colorToggle,
+            //   onPressed: () {},
+            //   child: Row(
+            //     children: [
+            //       Padding(
+            //         padding: EdgeInsets.only(
+            //           right: (MediaQuery.sizeOf(context).width <
+            //                   mobileSizeJO.width)
+            //               ? 0
+            //               : 10,
+            //           left: 20,
+            //         ),
+            //         child:
+            //             (MediaQuery.sizeOf(context).width < mobileSizeJO.width)
+            //                 ? const Text('')
+            //                 : Text(
+            //                     'View all',
+            //                     style: TextStyle(
+            //                       color: color,
+            //                       fontWeight: FontWeight.bold,
+            //                     ),
+            //                   ),
+            //       ),
+            //       Icon(
+            //         Icons.arrow_right_alt_sharp,
+            //         color: color,
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),
