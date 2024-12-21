@@ -7,6 +7,7 @@ import '../icons/jo_icons.dart';
 const List<TabActionAppBarJO> tabsActionAppBarJO = [
   TabActionAppBarJO('home'),
   TabActionAppBarJO('works'),
+  TabActionAppBarJO('skills'),
   TabActionAppBarJO('about me'),
   TabActionAppBarJO('contact me'),
 ];

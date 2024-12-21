@@ -51,6 +51,7 @@ class MyAppJO extends StatelessWidget {
                   HomePageJO(),
                   LineSeparatorPagesJO('works'),
                   WorksPageJO(),
+                  LineSeparatorPagesJO('skills'),
                   LineSeparatorPagesJO('about me'),
                   LineSeparatorPagesJO('contact me'),
                 ],
