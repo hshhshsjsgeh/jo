@@ -33,7 +33,7 @@ class AppBarJO extends PreferredSize {
       child: Padding(
         padding: EdgeInsets.only(
           left:
-              (MediaQuery.sizeOf(context).width < mobileSizeJO.width) ? 0 : 60,
+              (MediaQuery.sizeOf(context).width < mobileSizeJO.width) ? 0 : 50,
         ),
         child: AppBar(
           toolbarHeight: preferredSize.height,
@@ -76,38 +76,36 @@ class TitleAppBarJO extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => AppBarJOChangeNotifier(),
       builder: (context, child) {
-        return MouseRegion(
-          cursor: SystemMouseCursors.click,
-          onEnter: (event) {
-            Provider.of<AppBarJOChangeNotifier>(
-              context,
-              listen: false,
-            ).toggle(true);
-          },
-          onExit: (event) {
-            Provider.of<AppBarJOChangeNotifier>(
-              context,
-              listen: false,
-            ).toggle(false);
-          },
-          child: GestureDetector(
-            child: Row(
-              children: [
-                Consumer<AppBarJOChangeNotifier>(
-                  builder: (context, value, child) {
-                    return Icon(
-                      JOIcons.jo,
-                      color: (value.hovered)
-                          ? const Color(0xFFFF0000)
-                          : Colors.white,
-                    );
-                  },
-                ),
-                const SizedBox(width: 20),
-                const Text('Protofolio'),
-              ],
+        return Row(
+          children: [
+            GestureDetector(
+              onTapDown: (details) {
+                Provider.of<AppBarJOChangeNotifier>(context, listen: false)
+                    .toggle(true);
+              },
+              onTapCancel: () {
+                Provider.of<AppBarJOChangeNotifier>(context, listen: false)
+                    .toggle(false);
+              },
+              child: TextButton.icon(
+                onPressed: () {},
+                onHover: (value) {
+                  Provider.of<AppBarJOChangeNotifier>(context, listen: false)
+                      .toggle(value);
+                },
+                label: Text(' Protofolio'),
+                icon: Consumer<AppBarJOChangeNotifier>(
+                    builder: (context, value, child) {
+                  return Icon(
+                    JOIcons.jo,
+                    color: (value.hovered)
+                        ? const Color(0xFFFF0000)
+                        : Colors.white,
+                  );
+                }),
+              ),
             ),
-          ),
+          ],
         );
       },
     );

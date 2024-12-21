@@ -14,16 +14,16 @@ class WorksPageJO extends StatelessWidget {
       child: Wrap(
         spacing: 20,
         runSpacing: 20,
-        children: List.generate(20, (index) {
-          return WorkCardJO(
+        children: [
+          WorkCardJO(
             image: Image.network(
                 'https://images.template.net/wp-content/uploads/2024/12/Personal-Website-Templates.png'),
             languages: ['Dart', 'Flutter'],
-            title: 'Work $index',
-            description: 'Description of work $index',
+            title: 'Work 1',
+            description: 'Description of work 1',
             link: '',
-          );
-        }),
+          ),
+        ],
       ),
     );
   }
@@ -109,28 +109,37 @@ class _WorkCardJOState extends State<WorkCardJO> {
                   ),
                   Text(widget.description),
                   const SizedBox(height: 10),
-                  TextButton.icon(
-                    onPressed: () {},
-                    onHover: colorToggle,
-                    label: const Text('Live'),
-                    icon: const Icon(Icons.open_in_new),
-                    style: ButtonStyle(
-                      foregroundColor: WidgetStatePropertyAll<Color>(
-                        colorText,
-                      ),
-                      iconColor: WidgetStatePropertyAll<Color>(
-                        colorIcon,
-                      ),
-                      shape: WidgetStatePropertyAll<OutlinedBorder>(
-                        BeveledRectangleBorder(
-                          side: BorderSide(
-                            color: colorBorder,
-                            width: 0.5,
+                  GestureDetector(
+                    onTapDown: (details) {
+                      colorToggle(true);
+                    },
+                    onTapCancel: () {
+                      colorToggle(false);
+                    },
+                    child: TextButton.icon(
+                      onPressed: () {},
+                      onHover: colorToggle,
+                      label: const Text('Live'),
+                      icon: const Icon(Icons.open_in_new),
+                      style: ButtonStyle(
+                        foregroundColor: WidgetStatePropertyAll<Color>(
+                          colorText,
+                        ),
+                        iconColor: WidgetStatePropertyAll<Color>(
+                          colorIcon,
+                        ),
+                        shape: WidgetStatePropertyAll<OutlinedBorder>(
+                          BeveledRectangleBorder(
+                            side: BorderSide(
+                              color: colorBorder,
+                              width: 0.5,
+                            ),
                           ),
                         ),
-                      ),
-                      padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
-                        EdgeInsets.all(10),
+                        padding:
+                            const WidgetStatePropertyAll<EdgeInsetsGeometry>(
+                          EdgeInsets.all(10),
+                        ),
                       ),
                     ),
                   ),

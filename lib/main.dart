@@ -5,6 +5,7 @@ import 'package:jo/pages/home.dart';
 import 'package:jo/pages/works.dart';
 
 import './pages/app_bar.dart';
+import './pages/app_footer.dart';
 
 part './theme.dart';
 
@@ -37,21 +38,26 @@ class MyAppJO extends StatelessWidget {
     return SizedBox(
       width: MediaQuery.sizeOf(context).width,
       child: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal:
-                  (MediaQuery.sizeOf(context).width < mobileSizeJO.width)
-                      ? 0
-                      : 75),
-          child: const Column(
-            children: [
-              HomePageJO(),
-              LineSeparatorPagesJO('works'),
-              WorksPageJO(),
-              LineSeparatorPagesJO('about me'),
-              LineSeparatorPagesJO('contact me'),
-            ],
-          ),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal:
+                      (MediaQuery.sizeOf(context).width < mobileSizeJO.width)
+                          ? 0
+                          : 65),
+              child: const Column(
+                children: [
+                  HomePageJO(),
+                  LineSeparatorPagesJO('works'),
+                  WorksPageJO(),
+                  LineSeparatorPagesJO('about me'),
+                  LineSeparatorPagesJO('contact me'),
+                ],
+              ),
+            ),
+            const AppFooterJO(),
+          ],
         ),
       ),
     );
@@ -88,7 +94,7 @@ class _LineSeparatorPagesJOState extends State<LineSeparatorPagesJO> {
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal:
-              (MediaQuery.sizeOf(context).width < mobileSizeJO.width) ? 75 : 0,
+              (MediaQuery.sizeOf(context).width < mobileSizeJO.width) ? 65 : 0,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -96,7 +102,7 @@ class _LineSeparatorPagesJOState extends State<LineSeparatorPagesJO> {
             RichText(
               text: TextSpan(
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 20,
                   fontFamily:
                       Theme.of(context).textTheme.labelLarge?.fontFamily,
                 ),
@@ -111,13 +117,11 @@ class _LineSeparatorPagesJOState extends State<LineSeparatorPagesJO> {
                 ],
               ),
             ),
+            const SizedBox(width: 20),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: CustomPaint(
-                  size: const Size(1, 1),
-                  painter: LineSeparatorJOPainter(),
-                ),
+              child: CustomPaint(
+                size: const Size(1, 1),
+                painter: LineSeparatorJOPainter(),
               ),
             ),
             TextButton(
@@ -125,14 +129,25 @@ class _LineSeparatorPagesJOState extends State<LineSeparatorPagesJO> {
               onPressed: () {},
               child: Row(
                 children: [
-                  Text(
-                    'View all',
-                    style: TextStyle(
-                      color: color,
-                      fontWeight: FontWeight.bold,
+                  Padding(
+                    padding: EdgeInsets.only(
+                      right: (MediaQuery.sizeOf(context).width <
+                              mobileSizeJO.width)
+                          ? 0
+                          : 10,
+                      left: 20,
                     ),
+                    child:
+                        (MediaQuery.sizeOf(context).width < mobileSizeJO.width)
+                            ? const Text('')
+                            : Text(
+                                'View all',
+                                style: TextStyle(
+                                  color: color,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                   ),
-                  const SizedBox(width: 10),
                   Icon(
                     Icons.arrow_right_alt_sharp,
                     color: color,
