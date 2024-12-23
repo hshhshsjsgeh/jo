@@ -133,7 +133,7 @@ class TitleAppBarJO extends StatelessWidget {
 
 class TabActionAppBarJO extends StatelessWidget {
   const TabActionAppBarJO(
-    this.child, {
+    this.text, {
     super.key,
     required this.index,
     required this.scrollController,
@@ -143,7 +143,7 @@ class TabActionAppBarJO extends StatelessWidget {
   final int index;
   final bool isDialog;
   final ScrollController scrollController;
-  final String child;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -166,9 +166,8 @@ class TabActionAppBarJO extends StatelessWidget {
                 listen: false,
               ).toggle(false);
             },
-            child: GestureDetector(
-              onTap: () {
-                // scroll
+            child: TextIconButtonJO(
+              onPressed: () {
                 scrollController.animateTo(
                   (pagesKeys[index].currentContext!.findRenderObject()
                               as RenderBox)
@@ -183,24 +182,44 @@ class TabActionAppBarJO extends StatelessWidget {
                   Navigator.of(context).pop();
                 }
               },
-              child: Row(
-                children: [
-                  const Text('# ', style: TextStyle(color: Color(0xFFFF0000))),
-                  Consumer<AppBarJOChangeNotifier>(
-                    builder: (context, value, child2) {
-                      return Text(
-                        child,
-                        style: TextStyle(
-                          color: (value.hovered)
-                              ? const Color(0xFFFF0000)
-                              : Colors.white,
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
+              icon: Icons.tag,
+              label: text,
             ),
+            // child: GestureDetector(
+            //   onTap: () {
+            //     // scroll
+            //     scrollController.animateTo(
+            //       (pagesKeys[index].currentContext!.findRenderObject()
+            //                   as RenderBox)
+            //               .localToGlobal(Offset.zero)
+            //               .dy +
+            //           scrollController.offset -
+            //           50,
+            //       duration: Durations.long2,
+            //       curve: Curves.easeInOut,
+            //     );
+            //     if (isDialog) {
+            //       Navigator.of(context).pop();
+            //     }
+            //   },
+            //   child: Row(
+            //     children: [
+            //       const Text('# ', style: TextStyle(color: Color(0xFFFF0000))),
+            //       Consumer<AppBarJOChangeNotifier>(
+            //         builder: (context, value, child2) {
+            //           return Text(
+            //             child,
+            //             style: TextStyle(
+            //               color: (value.hovered)
+            //                   ? const Color(0xFFFF0000)
+            //                   : Colors.white,
+            //             ),
+            //           );
+            //         },
+            //       ),
+            //     ],
+            //   ),
+            // ),
           );
         },
       ),

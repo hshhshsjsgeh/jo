@@ -29,7 +29,7 @@ class WorksPageJO extends StatelessWidget {
   }
 }
 
-class JOWorkCard extends StatefulWidget {
+class JOWorkCard extends StatelessWidget {
   const JOWorkCard({
     super.key,
     required this.image,
@@ -42,26 +42,6 @@ class JOWorkCard extends StatefulWidget {
   final Image image;
   final List<String> languages;
   final String title, description, link;
-
-  @override
-  State<JOWorkCard> createState() => _JOWorkCardState();
-}
-
-class _JOWorkCardState extends State<JOWorkCard> {
-  Color colorText = theme.colorScheme.primary;
-  Color colorIcon = theme.colorScheme.primary;
-  Color colorBorder = theme.colorScheme.primary;
-
-  void colorToggle(bool toggled) {
-    setState(() {
-      colorText =
-          (toggled) ? theme.colorScheme.secondary : theme.colorScheme.primary;
-      colorIcon =
-          (toggled) ? theme.colorScheme.onPrimary : theme.colorScheme.primary;
-      colorBorder =
-          (toggled) ? theme.colorScheme.onPrimary : theme.colorScheme.primary;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +57,7 @@ class _JOWorkCardState extends State<JOWorkCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            widget.image,
+            image,
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -90,7 +70,7 @@ class _JOWorkCardState extends State<JOWorkCard> {
               ),
               child: Row(
                 children: [
-                  for (final language in widget.languages) Text('$language '),
+                  for (final language in languages) Text('$language '),
                 ],
               ),
             ),
@@ -100,48 +80,18 @@ class _JOWorkCardState extends State<JOWorkCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.title,
+                    title,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
                   ),
-                  Text(widget.description),
+                  Text(description),
                   const SizedBox(height: 10),
-                  GestureDetector(
-                    onTapDown: (details) {
-                      colorToggle(true);
-                    },
-                    onTapCancel: () {
-                      colorToggle(false);
-                    },
-                    child: TextButton.icon(
-                      onPressed: () {},
-                      onHover: colorToggle,
-                      label: const Text('Live'),
-                      icon: const Icon(Icons.open_in_new),
-                      style: ButtonStyle(
-                        foregroundColor: WidgetStatePropertyAll<Color>(
-                          colorText,
-                        ),
-                        iconColor: WidgetStatePropertyAll<Color>(
-                          colorIcon,
-                        ),
-                        shape: WidgetStatePropertyAll<OutlinedBorder>(
-                          BeveledRectangleBorder(
-                            side: BorderSide(
-                              color: colorBorder,
-                              width: 0.5,
-                            ),
-                          ),
-                        ),
-                        padding:
-                            const WidgetStatePropertyAll<EdgeInsetsGeometry>(
-                          EdgeInsets.all(10),
-                        ),
-                      ),
-                    ),
+                  TextIconButtonJO.outlined(
+                    icon: Icons.open_in_new,
+                    label: 'Live',
                   ),
                 ],
               ),
