@@ -4,13 +4,14 @@ import 'package:provider/provider.dart';
 import '../main.dart';
 import '../icons/jo_icons.dart';
 
-const List<TabActionAppBarJO> tabsActionAppBarJO = [
-  TabActionAppBarJO('home'),
-  TabActionAppBarJO('works'),
-  TabActionAppBarJO('skills'),
-  TabActionAppBarJO('about me'),
-  TabActionAppBarJO('contact me'),
-];
+List<TabActionAppBarJO> tabsActionAppBarJO = List.generate(
+  pages.length,
+  (index) => TabActionAppBarJO(
+    pages[index],
+    index: index,
+    scrollController: scrollController,
+  ),
+);
 
 final Map<IconData, String> socialIconsJO = {
   Icons.facebook: '',
@@ -22,8 +23,11 @@ class AppBarJO extends PreferredSize {
     super.key,
     required super.preferredSize,
     required super.child,
+    required this.scrollController,
     this.isDialog = false,
   });
+
+  final ScrollController scrollController;
 
   final bool isDialog;
 
@@ -40,10 +44,15 @@ class AppBarJO extends PreferredSize {
           toolbarHeight: preferredSize.height,
           automaticallyImplyLeading: false,
           surfaceTintColor: Colors.transparent,
-          title: const TitleAppBarJO(),
+          title: TitleAppBarJO(scrollController: scrollController),
           actions: (MediaQuery.sizeOf(context).width < mobileSizeJO.width ||
                   isDialog)
-              ? [MenuActionAppBarJO(isDialog: isDialog)]
+              ? [
+                  MenuActionAppBarJO(
+                    isDialog: isDialog,
+                    scrollController: scrollController,
+                  )
+                ]
               : tabsActionAppBarJO,
         ),
       ),
@@ -70,7 +79,10 @@ class AppBarJOChangeNotifier with ChangeNotifier {
 class TitleAppBarJO extends StatelessWidget {
   const TitleAppBarJO({
     super.key,
+    required this.scrollController,
   });
+
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +101,13 @@ class TitleAppBarJO extends StatelessWidget {
                     .toggle(false);
               },
               child: TextButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  scrollController.animateTo(
+                    0,
+                    duration: Durations.long2,
+                    curve: Curves.easeInOut,
+                  );
+                },
                 onHover: (value) {
                   Provider.of<AppBarJOChangeNotifier>(context, listen: false)
                       .toggle(value);
@@ -117,8 +135,14 @@ class TabActionAppBarJO extends StatelessWidget {
   const TabActionAppBarJO(
     this.child, {
     super.key,
+    required this.index,
+    required this.scrollController,
+    this.isDialog = false,
   });
 
+  final int index;
+  final bool isDialog;
+  final ScrollController scrollController;
   final String child;
 
   @override
@@ -143,6 +167,22 @@ class TabActionAppBarJO extends StatelessWidget {
               ).toggle(false);
             },
             child: GestureDetector(
+              onTap: () {
+                // scroll
+                scrollController.animateTo(
+                  (pagesKeys[index].currentContext!.findRenderObject()
+                              as RenderBox)
+                          .localToGlobal(Offset.zero)
+                          .dy +
+                      scrollController.offset -
+                      50,
+                  duration: Durations.long2,
+                  curve: Curves.easeInOut,
+                );
+                if (isDialog) {
+                  Navigator.of(context).pop();
+                }
+              },
               child: Row(
                 children: [
                   const Text('# ', style: TextStyle(color: Color(0xFFFF0000))),
@@ -172,7 +212,10 @@ class MenuActionAppBarJO extends StatefulWidget {
   const MenuActionAppBarJO({
     super.key,
     required this.isDialog,
+    required this.scrollController,
   });
+
+  final ScrollController scrollController;
 
   final bool isDialog;
 
@@ -218,15 +261,24 @@ class _MenuActionAppBarJOState extends State<MenuActionAppBarJO> {
                       backgroundColor: Colors.black,
                       child: Column(
                         children: [
-                          const AppBarJO(
+                          AppBarJO(
                             preferredSize: Size(5, 50),
                             isDialog: true,
+                            scrollController: widget.scrollController,
                             child: Text('JO header'),
                           ),
-                          const Expanded(
+                          Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: tabsActionAppBarJO,
+                              children: List.generate(
+                                pages.length,
+                                (index) => TabActionAppBarJO(
+                                  pages[index],
+                                  index: index,
+                                  scrollController: scrollController,
+                                  isDialog: true,
+                                ),
+                              ),
                             ),
                           ),
                           Padding(

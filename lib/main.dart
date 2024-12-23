@@ -3,11 +3,21 @@ import 'package:flutter/material.dart';
 // pages
 import 'package:jo/pages/home.dart';
 import 'package:jo/pages/works.dart';
+import 'package:jo/pages/skills.dart';
 
 import './pages/app_bar.dart';
 import './pages/app_footer.dart';
 
 part './theme.dart';
+
+final ScrollController scrollController = ScrollController();
+
+List<String> pages = ['works', 'skills', 'about me', 'contact me'];
+
+List<GlobalKey> pagesKeys = List.generate(
+  pages.length,
+  (index) => GlobalKey(debugLabel: pages[index]),
+);
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,26 +28,52 @@ void main() {
       child: Scaffold(
         floatingActionButtonLocation: JOFloatingActionButtonLocation.leftTop,
         floatingActionButton: JOFloatingActionButton(icons: socialIconsJO),
-        appBar: const AppBarJO(
+        appBar: AppBarJO(
           preferredSize: Size(5, 50),
+          scrollController: scrollController,
           child: Text('JO header'),
         ),
-        body: const MyAppJO(),
+        body: MyAppJO(
+          scrollController: scrollController,
+        ),
       ),
     ),
   ));
 }
 
-class MyAppJO extends StatelessWidget {
+class MyAppJO extends StatefulWidget {
   const MyAppJO({
     super.key,
+    required this.scrollController,
   });
+
+  final ScrollController scrollController;
+
+  @override
+  State<MyAppJO> createState() => _MyAppJOState();
+}
+
+class _MyAppJOState extends State<MyAppJO> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    _scrollController = widget.scrollController;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.sizeOf(context).width,
       child: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           children: [
             Padding(
@@ -46,14 +82,15 @@ class MyAppJO extends StatelessWidget {
                       (MediaQuery.sizeOf(context).width < mobileSizeJO.width)
                           ? 0
                           : 65),
-              child: const Column(
+              child: Column(
                 children: [
                   HomePageJO(),
-                  LineSeparatorPagesJO('works'),
+                  LineSeparatorPagesJO(key: pagesKeys[0], 'works'),
                   WorksPageJO(),
-                  LineSeparatorPagesJO('skills'),
-                  LineSeparatorPagesJO('about me'),
-                  LineSeparatorPagesJO('contact me'),
+                  LineSeparatorPagesJO(key: pagesKeys[1], 'skills'),
+                  SkillsPageJO(),
+                  LineSeparatorPagesJO(key: pagesKeys[2], 'about me'),
+                  LineSeparatorPagesJO(key: pagesKeys[3], 'contact me'),
                 ],
               ),
             ),

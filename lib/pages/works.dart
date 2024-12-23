@@ -15,7 +15,7 @@ class WorksPageJO extends StatelessWidget {
         spacing: 20,
         runSpacing: 20,
         children: [
-          WorkCardJO(
+          JOWorkCard(
             image: Image.network(
                 'https://images.template.net/wp-content/uploads/2024/12/Personal-Website-Templates.png'),
             languages: ['Dart', 'Flutter'],
@@ -29,8 +29,8 @@ class WorksPageJO extends StatelessWidget {
   }
 }
 
-class WorkCardJO extends StatefulWidget {
-  const WorkCardJO({
+class JOWorkCard extends StatefulWidget {
+  const JOWorkCard({
     super.key,
     required this.image,
     required this.languages,
@@ -44,10 +44,10 @@ class WorkCardJO extends StatefulWidget {
   final String title, description, link;
 
   @override
-  State<WorkCardJO> createState() => _WorkCardJOState();
+  State<JOWorkCard> createState() => _JOWorkCardState();
 }
 
-class _WorkCardJOState extends State<WorkCardJO> {
+class _JOWorkCardState extends State<JOWorkCard> {
   Color colorText = theme.colorScheme.primary;
   Color colorIcon = theme.colorScheme.primary;
   Color colorBorder = theme.colorScheme.primary;
