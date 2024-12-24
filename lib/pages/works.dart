@@ -51,7 +51,7 @@ class JOWorkCard extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(
             color: Theme.of(context).colorScheme.primary,
-            width: 0.5,
+            width: 1,
           ),
         ),
         child: Column(
@@ -64,7 +64,7 @@ class JOWorkCard extends StatelessWidget {
                 border: BorderDirectional(
                   bottom: BorderSide(
                     color: Theme.of(context).colorScheme.primary,
-                    width: 0.5,
+                    width: 1,
                   ),
                 ),
               ),

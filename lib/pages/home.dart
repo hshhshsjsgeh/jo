@@ -126,7 +126,7 @@ class QoutedBoxJO extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Theme.of(context).colorScheme.primary,
-                    width: 0.5,
+                    width: 1,
                   ),
                 ),
                 child: Padding(
@@ -156,15 +156,15 @@ class QoutedBoxJO extends StatelessWidget {
                   border: Border(
                     bottom: BorderSide(
                       color: Theme.of(context).colorScheme.primary,
-                      width: 0.5,
+                      width: 1,
                     ),
                     right: BorderSide(
                       color: Theme.of(context).colorScheme.primary,
-                      width: 0.5,
+                      width: 1,
                     ),
                     left: BorderSide(
                       color: Theme.of(context).colorScheme.primary,
-                      width: 0.5,
+                      width: 1,
                     ),
                   ),
                 ),
@@ -353,7 +353,7 @@ class ProfileJO extends StatelessWidget {
                   color: Theme.of(context).scaffoldBackgroundColor,
                   border: Border.all(
                     color: Theme.of(context).colorScheme.primary,
-                    width: 0.5,
+                    width: 1,
                   ),
                 ),
                 child: Padding(

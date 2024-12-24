@@ -44,7 +44,10 @@ class AppBarJO extends PreferredSize {
           toolbarHeight: preferredSize.height,
           automaticallyImplyLeading: false,
           surfaceTintColor: Colors.transparent,
-          title: TitleAppBarJO(scrollController: scrollController),
+          title: TitleAppBarJO(
+            scrollController: scrollController,
+            isDialog: isDialog,
+          ),
           actions: (MediaQuery.sizeOf(context).width < mobileSizeJO.width ||
                   isDialog)
               ? [
@@ -80,9 +83,11 @@ class TitleAppBarJO extends StatelessWidget {
   const TitleAppBarJO({
     super.key,
     required this.scrollController,
+    this.isDialog = false,
   });
 
   final ScrollController scrollController;
+  final bool isDialog;
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +112,9 @@ class TitleAppBarJO extends StatelessWidget {
                     duration: Durations.long2,
                     curve: Curves.easeInOut,
                   );
+                  if (isDialog) {
+                    Navigator.of(context).pop();
+                  }
                 },
                 onHover: (value) {
                   Provider.of<AppBarJOChangeNotifier>(context, listen: false)

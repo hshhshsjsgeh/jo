@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/diagnostics.dart';
 
 // pages
 import 'package:jo/pages/home.dart';
