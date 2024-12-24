@@ -1,6 +1,11 @@
 part of 'bar_bloc.dart';
 
 @immutable
-sealed class BarState {}
+sealed class AppBarJOState {}
 
-final class BarInitial extends BarState {}
+final class BarInitial extends AppBarJOState {}
+
+final class AppBarJOChangedState extends AppBarJOState {
+  final int activeIndex;
+  AppBarJOChangedState(this.activeIndex);
+}

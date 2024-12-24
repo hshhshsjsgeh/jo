@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+
+import '../bloc/bar_bloc.dart';
 
 import '../main.dart';
 import '../icons/jo_icons.dart';
 
-List<TabActionAppBarJO> tabsActionAppBarJO = List.generate(
-  pages.length,
-  (index) => TabActionAppBarJO(
-    pages[index],
-    index: index,
-    scrollController: scrollController,
-  ),
-);
+List<TabActionAppBarJO> tabsActionAppBarJO({
+  int? activatedIndex,
+  bool isDialog = false,
+}) {
+  return List.generate(
+    pages.length,
+    (index) => TabActionAppBarJO(
+      pages[index],
+      index: index,
+      scrollController: scrollController,
+      isDialog: isDialog,
+      activated: activatedIndex == index,
+    ),
+  );
+}
 
 final Map<IconData, String> socialIconsJO = {
   Icons.facebook: '',
@@ -40,24 +50,62 @@ class AppBarJO extends PreferredSize {
           left:
               (MediaQuery.sizeOf(context).width < mobileSizeJO.width) ? 0 : 50,
         ),
-        child: AppBar(
-          toolbarHeight: preferredSize.height,
-          automaticallyImplyLeading: false,
-          surfaceTintColor: Colors.transparent,
-          title: TitleAppBarJO(
-            scrollController: scrollController,
-            isDialog: isDialog,
-          ),
-          actions: (MediaQuery.sizeOf(context).width < mobileSizeJO.width ||
-                  isDialog)
-              ? [
-                  MenuActionAppBarJO(
-                    isDialog: isDialog,
-                    scrollController: scrollController,
-                  )
-                ]
-              : tabsActionAppBarJO,
+        child: AppBarWidgetJO(
+          preferredSize: preferredSize,
+          scrollController: scrollController,
+          isDialog: isDialog,
         ),
+      ),
+    );
+  }
+}
+
+class AppBarWidgetJO extends StatelessWidget {
+  const AppBarWidgetJO({
+    super.key,
+    required this.preferredSize,
+    required this.scrollController,
+    required this.isDialog,
+  });
+
+  final Size preferredSize;
+  final ScrollController scrollController;
+  final bool isDialog;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => AppBarJOBloc(),
+      child: BlocBuilder<AppBarJOBloc, AppBarJOState>(
+        builder: (context, state) {
+          // change in scroll
+          scrollController.addListener(() {
+            if (scrollController.offset > 500) {
+              BlocProvider.of<AppBarJOBloc>(context).add(AppBarScrollEvent(1));
+            }
+          });
+          return AppBar(
+            toolbarHeight: preferredSize.height,
+            automaticallyImplyLeading: false,
+            surfaceTintColor: Colors.transparent,
+            title: TitleAppBarJO(
+              scrollController: scrollController,
+              isDialog: isDialog,
+            ),
+            actions: (MediaQuery.sizeOf(context).width < mobileSizeJO.width ||
+                    isDialog)
+                ? [
+                    MenuActionAppBarJO(
+                      isDialog: isDialog,
+                      scrollController: scrollController,
+                    )
+                  ]
+                : tabsActionAppBarJO(
+                    activatedIndex:
+                        BlocProvider.of<AppBarJOBloc>(context).activeIndex,
+                  ),
+          );
+        },
       ),
     );
   }
@@ -146,10 +194,11 @@ class TabActionAppBarJO extends StatelessWidget {
     required this.index,
     required this.scrollController,
     this.isDialog = false,
+    this.activated = false,
   });
 
   final int index;
-  final bool isDialog;
+  final bool isDialog, activated;
   final ScrollController scrollController;
   final String text;
 
@@ -157,79 +206,24 @@ class TabActionAppBarJO extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: ChangeNotifierProvider(
-        create: (context) => AppBarJOChangeNotifier(),
-        builder: (context, child1) {
-          return MouseRegion(
-            cursor: SystemMouseCursors.click,
-            onEnter: (event) {
-              Provider.of<AppBarJOChangeNotifier>(
-                context,
-                listen: false,
-              ).toggle(true);
-            },
-            onExit: (event) {
-              Provider.of<AppBarJOChangeNotifier>(
-                context,
-                listen: false,
-              ).toggle(false);
-            },
-            child: TextIconButtonJO(
-              onPressed: () {
-                scrollController.animateTo(
-                  (pagesKeys[index].currentContext!.findRenderObject()
-                              as RenderBox)
-                          .localToGlobal(Offset.zero)
-                          .dy +
-                      scrollController.offset -
-                      50,
-                  duration: Durations.long2,
-                  curve: Curves.easeInOut,
-                );
-                if (isDialog) {
-                  Navigator.of(context).pop();
-                }
-              },
-              icon: Icons.tag,
-              label: text,
-            ),
-            // child: GestureDetector(
-            //   onTap: () {
-            //     // scroll
-            //     scrollController.animateTo(
-            //       (pagesKeys[index].currentContext!.findRenderObject()
-            //                   as RenderBox)
-            //               .localToGlobal(Offset.zero)
-            //               .dy +
-            //           scrollController.offset -
-            //           50,
-            //       duration: Durations.long2,
-            //       curve: Curves.easeInOut,
-            //     );
-            //     if (isDialog) {
-            //       Navigator.of(context).pop();
-            //     }
-            //   },
-            //   child: Row(
-            //     children: [
-            //       const Text('# ', style: TextStyle(color: Color(0xFFFF0000))),
-            //       Consumer<AppBarJOChangeNotifier>(
-            //         builder: (context, value, child2) {
-            //           return Text(
-            //             child,
-            //             style: TextStyle(
-            //               color: (value.hovered)
-            //                   ? const Color(0xFFFF0000)
-            //                   : Colors.white,
-            //             ),
-            //           );
-            //         },
-            //       ),
-            //     ],
-            //   ),
-            // ),
+      child: TextIconButtonJO(
+        onPressed: () {
+          scrollController.animateTo(
+            (pagesKeys[index].currentContext!.findRenderObject() as RenderBox)
+                    .localToGlobal(Offset.zero)
+                    .dy +
+                scrollController.offset -
+                50,
+            duration: Durations.long2,
+            curve: Curves.easeInOut,
           );
+          if (isDialog) {
+            Navigator.of(context).pop();
+          }
         },
+        activated: activated,
+        icon: Icons.tag,
+        label: text,
       ),
     );
   }
@@ -297,15 +291,8 @@ class _MenuActionAppBarJOState extends State<MenuActionAppBarJO> {
                           Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: List.generate(
-                                pages.length,
-                                (index) => TabActionAppBarJO(
-                                  pages[index],
-                                  index: index,
-                                  scrollController: scrollController,
-                                  isDialog: true,
-                                ),
-                              ),
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: tabsActionAppBarJO(isDialog: true),
                             ),
                           ),
                           Padding(
