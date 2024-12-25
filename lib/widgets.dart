@@ -11,6 +11,7 @@ class _TextIconButtonJO extends TextIconButtonJO {
     super.activated,
     super.iconSize,
     super.textSize,
+    super.cursor,
     this.filled = false,
   });
 
@@ -30,6 +31,7 @@ class _TextIconButtonJO extends TextIconButtonJO {
       onPressed: onPressed,
       iconSize: iconSize,
       textSize: textSize,
+      cursor: cursor,
     );
   }
 }
@@ -45,6 +47,7 @@ class TextIconButtonJO extends StatelessWidget {
     this.only = TextIconButtonOnlyJO.normal,
     this.iconSize,
     this.textSize,
+    this.cursor,
   });
 
   final IconData icon;
@@ -53,6 +56,7 @@ class TextIconButtonJO extends StatelessWidget {
   final void Function()? onPressed;
   final TextIconButtonOnlyJO only;
   final double? iconSize, textSize;
+  final MouseCursor? cursor;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +69,7 @@ class TextIconButtonJO extends StatelessWidget {
       onPressed: onPressed,
       iconSize: iconSize,
       textSize: textSize,
+      cursor: cursor,
     );
   }
 
@@ -78,6 +83,7 @@ class TextIconButtonJO extends StatelessWidget {
     Function()? onPressed,
     double? iconSize,
     double? textSize,
+    MouseCursor? cursor,
   }) {
     return _TextIconButtonJO(
       key: key,
@@ -89,6 +95,7 @@ class TextIconButtonJO extends StatelessWidget {
       onPressed: onPressed,
       iconSize: iconSize,
       textSize: textSize,
+      cursor: cursor,
     );
   }
 
@@ -102,19 +109,20 @@ class TextIconButtonJO extends StatelessWidget {
     Function()? onPressed,
     double? iconSize,
     double? textSize,
+    MouseCursor? cursor,
   }) {
     return _TextIconButtonJO(
-      key: key,
-      icon: icon,
-      label: label,
-      only: only,
-      reversed: reversed,
-      filled: true,
-      activated: activated,
-      onPressed: onPressed,
-      iconSize: iconSize,
-      textSize: textSize,
-    );
+        key: key,
+        icon: icon,
+        label: label,
+        only: only,
+        reversed: reversed,
+        filled: true,
+        activated: activated,
+        onPressed: onPressed,
+        iconSize: iconSize,
+        textSize: textSize,
+        cursor: cursor);
   }
 }
 
@@ -134,6 +142,7 @@ class TextIconButtonWidgetJO extends StatefulWidget {
     this.onPressed,
     this.iconSize,
     this.textSize,
+    this.cursor,
   });
 
   final bool reversed, activated;
@@ -143,6 +152,7 @@ class TextIconButtonWidgetJO extends StatefulWidget {
   final void Function()? onPressed;
   final TextIconButtonOnlyJO only;
   final double? iconSize, textSize;
+  final MouseCursor? cursor;
 
   @override
   State<TextIconButtonWidgetJO> createState() {
@@ -186,77 +196,84 @@ class _TextIconButtonWidgetJOState extends State<TextIconButtonWidgetJO> {
                   )
                 : null,
       ),
-      child: GestureDetector(
-        onTapDown: (details) {
-          onHover(true);
-        },
-        onTapCancel: () {
-          onHover(false);
-        },
-        child: TextButton(
-          onPressed: () {
-            widget.onPressed!();
+      child: MouseRegion(
+        cursor: widget.cursor ?? SystemMouseCursors.click,
+        child: GestureDetector(
+          onTapDown: (details) {
+            onHover(true);
           },
-          onHover: (value) {
-            onHover(value);
+          onTapCancel: () {
+            onHover(false);
           },
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: widget.type == TextIconButtonTypeJO.normal ? 0 : 5,
-              horizontal: widget.type == TextIconButtonTypeJO.normal ? 0 : 10,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              textDirection: (widget.reversed) ? TextDirection.rtl : null,
-              children: [
-                ...(widget.only == TextIconButtonOnlyJO.normal ||
-                        widget.only == TextIconButtonOnlyJO.iconOnly)
-                    ? [
-                        Icon(
-                          widget.icon,
-                          color: (widget.type == TextIconButtonTypeJO.outlined)
-                              ? (hovered)
-                                  ? Theme.of(context).colorScheme.onPrimary
-                                  : Theme.of(context).colorScheme.primary
-                              : (widget.type == TextIconButtonTypeJO.filled)
-                                  ? Theme.of(context).colorScheme.secondary
-                                  : Theme.of(context).colorScheme.onSecondary,
-                          size: widget.iconSize,
-                        ),
-                      ]
-                    : [],
-                ...(widget.only == TextIconButtonOnlyJO.normal ||
-                        widget.only == TextIconButtonOnlyJO.textOnly)
-                    ? [
-                        Text(' ', style: TextStyle(fontSize: widget.textSize)),
-                        Text(
-                          widget.label,
-                          style: TextStyle(
+          child: TextButton(
+            onPressed: (widget.onPressed != null)
+                ? () {
+                    widget.onPressed!();
+                  }
+                : () {},
+            onHover: (value) {
+              onHover(value);
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: widget.type == TextIconButtonTypeJO.normal ? 0 : 5,
+                horizontal: widget.type == TextIconButtonTypeJO.normal ? 0 : 10,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                textDirection: (widget.reversed) ? TextDirection.rtl : null,
+                children: [
+                  ...(widget.only == TextIconButtonOnlyJO.normal ||
+                          widget.only == TextIconButtonOnlyJO.iconOnly)
+                      ? [
+                          Icon(
+                            widget.icon,
                             color: (widget.type ==
                                     TextIconButtonTypeJO.outlined)
                                 ? (hovered)
-                                    ? Theme.of(context).colorScheme.secondary
+                                    ? Theme.of(context).colorScheme.onPrimary
                                     : Theme.of(context).colorScheme.primary
                                 : (widget.type == TextIconButtonTypeJO.filled)
-                                    ? (hovered)
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .secondary
-                                        : Theme.of(context)
-                                            .scaffoldBackgroundColor
-                                    : (hovered)
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .onSecondary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                            fontSize: widget.textSize,
+                                    ? Theme.of(context).colorScheme.secondary
+                                    : Theme.of(context).colorScheme.onSecondary,
+                            size: widget.iconSize,
                           ),
-                        ),
-                      ]
-                    : [],
-              ],
+                        ]
+                      : [],
+                  ...(widget.only == TextIconButtonOnlyJO.normal ||
+                          widget.only == TextIconButtonOnlyJO.textOnly)
+                      ? [
+                          Text(' ',
+                              style: TextStyle(fontSize: widget.textSize)),
+                          Text(
+                            widget.label,
+                            style: TextStyle(
+                              color: (widget.type ==
+                                      TextIconButtonTypeJO.outlined)
+                                  ? (hovered)
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Theme.of(context).colorScheme.primary
+                                  : (widget.type == TextIconButtonTypeJO.filled)
+                                      ? (hovered)
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .secondary
+                                          : Theme.of(context)
+                                              .scaffoldBackgroundColor
+                                      : (hovered)
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .onSecondary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                              fontSize: widget.textSize,
+                            ),
+                          ),
+                        ]
+                      : [],
+                ],
+              ),
             ),
           ),
         ),

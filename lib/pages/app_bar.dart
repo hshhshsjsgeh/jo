@@ -166,14 +166,20 @@ class TitleAppBarJO extends StatelessWidget {
                 },
                 label: Text(' Protofolio'),
                 icon: Consumer<AppBarJOChangeNotifier>(
-                    builder: (context, value, child) {
-                  return Icon(
-                    JOIcons.jo,
-                    color: (value.hovered)
-                        ? const Color(0xFFFF0000)
-                        : Colors.white,
-                  );
-                }),
+                  builder: (context, value, child) {
+                    return Icon(
+                      JOIcons.jo,
+                      color: (value.hovered)
+                          ? const Color(0xFFFF0000)
+                          : Colors.white,
+                    );
+                  },
+                ),
+                style: ButtonStyle(
+                  mouseCursor: WidgetStatePropertyAll<MouseCursor>(
+                    SystemMouseCursors.click,
+                  ),
+                ),
               ),
             ),
           ],

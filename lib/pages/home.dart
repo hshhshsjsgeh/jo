@@ -11,12 +11,21 @@ class HomePageJO extends StatefulWidget {
 }
 
 class _HomePageJOState extends State<HomePageJO> {
-  late final ScrollController _scrollController;
+  late final PageController _pageController;
 
   @override
   void initState() {
-    _scrollController = ScrollController();
+    _pageController = PageController();
+    page = 0;
     super.initState();
+  }
+
+  late int page;
+
+  void changePage(int index) {
+    setState(() {
+      page = index;
+    });
   }
 
   @override
@@ -27,77 +36,126 @@ class _HomePageJOState extends State<HomePageJO> {
               (MediaQuery.sizeOf(context).width < mobileSizeJO.width) ? 75 : 0),
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxHeight: MediaQuery.sizeOf(context).height - 50,
+          maxHeight: MediaQuery.sizeOf(context).height - 75,
         ),
-        child: Scrollbar(
-          controller: _scrollController,
-          thumbVisibility: false,
-          trackVisibility: false,
-          child: GridView.builder(
-            controller: _scrollController,
-            physics: StepScrollPhysics(
-              step: MediaQuery.sizeOf(context).height - 50,
-              isPages: true,
-            ),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount:
-                  (MediaQuery.sizeOf(context).width < mobileSizeJO.width + 200)
+        child: Stack(
+          children: [
+            Scrollbar(
+              controller: _pageController,
+              thumbVisibility: false,
+              trackVisibility: false,
+              child: GridView.builder(
+                controller: _pageController,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: (MediaQuery.sizeOf(context).width <
+                          mobileSizeJO.width + 200)
                       ? 1
                       : 2,
-              mainAxisExtent: MediaQuery.sizeOf(context).height - 50,
-            ),
-            itemCount: 2,
-            itemBuilder: (BuildContext context, int index) {
-              return (index == 0)
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SelectableText.rich(
-                          TextSpan(
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontFamily: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.fontFamily,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            children: [
-                              const TextSpan(text: 'Youssef is a '),
-                              TextSpan(
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSecondary,
-                                ),
-                                text: 'flutter developer',
-                              ),
-                              const TextSpan(text: ' and '),
-                              TextSpan(
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSecondary,
-                                ),
-                                text: 'back-end developer',
-                              ),
-                            ],
-                          ),
-                          cursorColor: Theme.of(context).colorScheme.onPrimary,
-                          textAlign: TextAlign.justify,
-                        ),
-                        const Column(
+                  mainAxisExtent: MediaQuery.sizeOf(context).height - 100,
+                ),
+                itemCount: 2,
+                itemBuilder: (BuildContext context, int index) {
+                  return (index == 0)
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            QoutedBoxJO(
-                              text:
-                                  'jjdfkdkjndkjdnkjdndjkndkjdn dkjndknd kjdnkhghkgjhgjhgjjhdkjndkjdn jkfdnfdkjdnk jjdfkdkjndkjdnkjdndjkndkjdn dkjndknd kjdnkhghkgjhgjhgjjhdkjndkjdn jkfdnfdkjdnk jjdfkdkjndkjdnkjdndjkndkjdn dkjndknd kjdnkhghkgjhgjhgjjhdkjndkjdn jkfdnfdkjdnk jjdfkdkjndkjdnkjdndjkndkjdn dkjndknd kjdnkhghkgjhgjhgjjhdkjndkjdn jkfdnfdkjdnk jjdfkdkjndkjdnkjdndjkndkjdn dkjndknd kjdnkhghkgjhgjhgjjhdkjndkjdn jkfdnfdkjdnk jjdfkdkjndkjdnkjdndjkndkjdn dkjndknd kjdnkhghkgjhgjhgjjhdkjndkjdn jkfdnfdkjdnk',
-                              author: 'Youssef',
+                            SelectableText.rich(
+                              TextSpan(
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontFamily: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.fontFamily,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                ),
+                                children: [
+                                  const TextSpan(text: 'Youssef is a '),
+                                  TextSpan(
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondary,
+                                    ),
+                                    text: 'flutter developer',
+                                  ),
+                                  const TextSpan(text: ' and '),
+                                  TextSpan(
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondary,
+                                    ),
+                                    text: 'back-end developer',
+                                  ),
+                                ],
+                              ),
+                              cursorColor:
+                                  Theme.of(context).colorScheme.onPrimary,
+                              textAlign: TextAlign.justify,
+                            ),
+                            const Column(
+                              children: [
+                                QoutedBoxJO(
+                                  text:
+                                      'jjdfkdkjndkjdnkjdndjkndkjdn dkjndknd kjdnkhghkgjhgjhgjjhdkjndkjdn jkfdnfdkjdnk jjdfkdkjndkjdnkjdndjkndkjdn dkjndknd kjdnkhghkgjhgjhgjjhdkjndkjdn jkfdnfdkjdnk jjdfkdkjndkjdnkjdndjkndkjdn dkjndknd kjdnkhghkgjhgjhgjjhdkjndkjdn jkfdnfdkjdnk jjdfkdkjndkjdnkjdndjkndkjdn dkjndknd kjdnkhghkgjhgjhgjjhdkjndkjdn jkfdnfdkjdnk jjdfkdkjndkjdnkjdndjkndkjdn dkjndknd kjdnkhghkgjhgjhgjjhdkjndkjdn jkfdnfdkjdnk jjdfkdkjndkjdnkjdndjkndkjdn dkjndknd kjdnkhghkgjhgjhgjjhdkjndkjdn jkfdnfdkjdnk',
+                                  author: 'Youssef',
+                                ),
+                              ],
                             ),
                           ],
-                        ),
-                      ],
-                    )
-                  : const ProfileJO();
-            },
-          ),
+                        )
+                      : const ProfileJO();
+                },
+              ),
+            ),
+            ...(MediaQuery.sizeOf(context).width < mobileSizeJO.width + 200)
+                ? [
+                    ...(page == 0)
+                        ? []
+                        : [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 50),
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: TextIconButtonJO(
+                                  onPressed: () {
+                                    changePage(0);
+                                    _pageController.jumpToPage(0);
+                                  },
+                                  icon: Icons.keyboard_arrow_up_sharp,
+                                  label: '',
+                                  iconSize: 30,
+                                  only: TextIconButtonOnlyJO.iconOnly,
+                                ),
+                              ),
+                            ),
+                          ],
+                    ...(page == 1)
+                        ? []
+                        : [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 50),
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: TextIconButtonJO(
+                                  onPressed: () {
+                                    changePage(1);
+                                    _pageController.jumpToPage(1);
+                                  },
+                                  icon: Icons.keyboard_arrow_down_sharp,
+                                  label: '',
+                                  iconSize: 30,
+                                  only: TextIconButtonOnlyJO.iconOnly,
+                                ),
+                              ),
+                            )
+                          ],
+                  ]
+                : [],
+          ],
         ),
       ),
     );
@@ -138,7 +196,7 @@ class QoutedBoxJO extends StatelessWidget {
                             ? 40
                             : 80),
                     child: SingleChildScrollView(
-                      physics: const StepScrollPhysics(),
+                      physics: const ScrollPhysics(),
                       child: Builder(
                         builder: (context) {
                           return SelectableText.rich(
@@ -228,78 +286,78 @@ class QoutedBoxJO extends StatelessWidget {
   }
 }
 
-class StepScrollPhysics extends ScrollPhysics {
-  const StepScrollPhysics({
-    super.parent,
-    this.step = 20,
-    this.isPages = false,
-  });
+// class StepScrollPhysics extends ScrollPhysics {
+//   const StepScrollPhysics({
+//     super.parent,
+//     this.step = 20,
+//     this.isPages = false,
+//   });
 
-  final double step;
-  final bool isPages;
+//   final double step;
+//   final bool isPages;
 
-  // @override
-  // ScrollPhysics applyTo(ScrollPhysics? ancestor) {
-  //   return StepScrollPhysics(
-  //     parent: buildParent(parent),
-  //     step: step,
-  //     isPages: isPages,
-  //   );
-  // }
+// @override
+// ScrollPhysics applyTo(ScrollPhysics? ancestor) {
+//   return StepScrollPhysics(
+//     parent: buildParent(parent),
+//     step: step,
+//     isPages: isPages,
+//   );
+// }
 
-  // @override
-  // double applyBoundaryConditions(ScrollMetrics position, double value) {
-  //   if (value < position.minScrollExtent) {
-  //     return value;
-  //   } else if (value > position.maxScrollExtent) {
-  //     return value - position.maxScrollExtent;
-  //   } else {
-  //     return 0;
-  //   }
-  // }
+// @override
+// double applyBoundaryConditions(ScrollMetrics position, double value) {
+//   if (value < position.minScrollExtent) {
+//     return value;
+//   } else if (value > position.maxScrollExtent) {
+//     return value - position.maxScrollExtent;
+//   } else {
+//     return 0;
+//   }
+// }
 
-  // @override
-  // double adjustPositionForNewDimensions({
-  //   required ScrollMetrics oldPosition,
-  //   required ScrollMetrics newPosition,
-  //   required bool isScrolling,
-  //   required double velocity,
-  // }) {
-  //   if (newPosition.pixels < newPosition.minScrollExtent) {
-  //     return newPosition.minScrollExtent;
-  //   } else if (newPosition.pixels > newPosition.maxScrollExtent) {
-  //     return newPosition.maxScrollExtent;
-  //   } else {
-  //     return newPosition.pixels;
-  //   }
-  // }
+// @override
+// double adjustPositionForNewDimensions({
+//   required ScrollMetrics oldPosition,
+//   required ScrollMetrics newPosition,
+//   required bool isScrolling,
+//   required double velocity,
+// }) {
+//   if (newPosition.pixels < newPosition.minScrollExtent) {
+//     return newPosition.minScrollExtent;
+//   } else if (newPosition.pixels > newPosition.maxScrollExtent) {
+//     return newPosition.maxScrollExtent;
+//   } else {
+//     return newPosition.pixels;
+//   }
+// }
 
-  // @override
-  // Simulation? createBallisticSimulation(
-  //   ScrollMetrics position,
-  //   double velocity,
-  // ) {
-  //   double newPixels = position.pixels;
+// @override
+// Simulation? createBallisticSimulation(
+//   ScrollMetrics position,
+//   double velocity,
+// ) {
+//   double newPixels = position.pixels;
 
-  //   if (velocity.isNegative) {
-  //     newPixels = (position.pixels * 2) - ((position.pixels * 2) % step);
-  //   }
+//   if (velocity.isNegative) {
+//     newPixels = (position.pixels * 2) - ((position.pixels * 2) % step);
+//   }
 
-  //   Simulation simulation = ScrollSpringSimulation(
-  //     spring,
-  //     position.pixels,
-  //     newPixels,
-  //     velocity,
-  //     tolerance: toleranceFor(position),
-  //   );
-  //   return (isPages)
-  //       ? simulation
-  //       : super.createBallisticSimulation(
-  //           position,
-  //           velocity,
-  //         );
-  // }
-}
+//   Simulation simulation = ScrollSpringSimulation(
+//     spring,
+//     position.pixels,
+//     newPixels,
+//     velocity,
+//     tolerance: toleranceFor(position),
+//   );
+//   return (isPages)
+//       ? simulation
+//       : super.createBallisticSimulation(
+//           position,
+//           velocity,
+//         );
+// }
+// }
 
 // class JOSimulation extends Simulation {
 //   @override

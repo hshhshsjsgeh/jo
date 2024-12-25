@@ -138,23 +138,10 @@ class _LineSeparatorPagesJOState extends State<LineSeparatorPagesJO> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            RichText(
-              text: TextSpan(
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily:
-                      Theme.of(context).textTheme.labelLarge?.fontFamily,
-                ),
-                children: [
-                  TextSpan(
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    text: '# ',
-                  ),
-                  TextSpan(text: widget.text),
-                ],
-              ),
+            TextIconButtonJO(
+              icon: Icons.tag,
+              label: widget.text,
+              cursor: MouseCursor.defer,
             ),
             const SizedBox(width: 20),
             Expanded(

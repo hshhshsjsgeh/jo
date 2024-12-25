@@ -1,6 +1,7 @@
 part of './main.dart';
 
 final ThemeData theme = ThemeData(
+  visualDensity: VisualDensity(horizontal: 1, vertical: 1),
   scaffoldBackgroundColor: Colors.black,
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.black,
@@ -48,17 +49,20 @@ final ThemeData theme = ThemeData(
       padding: WidgetStatePropertyAll(EdgeInsets.only(left: 50)),
     ),
   ),
-  textButtonTheme: const TextButtonThemeData(
+  textButtonTheme: TextButtonThemeData(
     style: ButtonStyle(
       iconColor: WidgetStatePropertyAll(Colors.white),
       foregroundColor: WidgetStatePropertyAll(Colors.white),
       overlayColor: WidgetStatePropertyAll(Colors.transparent),
       shape: WidgetStatePropertyAll(LinearBorder.none),
+      side: WidgetStatePropertyAll<BorderSide>(BorderSide(width: 0)),
       padding: WidgetStatePropertyAll(EdgeInsets.zero),
       animationDuration: Duration.zero,
       minimumSize: WidgetStatePropertyAll<Size>(Size.zero),
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      mouseCursor: WidgetStatePropertyAll<MouseCursor>(MouseCursor.defer),
     ),
   ),
 );
 
-const Size mobileSizeJO = Size(730, 430);
+const Size mobileSizeJO = Size(760, 430);
