@@ -56,8 +56,9 @@ final ThemeData theme = ThemeData(
       shape: WidgetStatePropertyAll(LinearBorder.none),
       padding: WidgetStatePropertyAll(EdgeInsets.zero),
       animationDuration: Duration.zero,
+      minimumSize: WidgetStatePropertyAll<Size>(Size.zero),
     ),
   ),
 );
 
-const Size mobileSizeJO = Size(710, 430);
+const Size mobileSizeJO = Size(730, 430);

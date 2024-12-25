@@ -37,7 +37,7 @@ class SkillsPageJO extends StatelessWidget {
             jop: 'Back-end Developer',
             framework: 'Back-end',
             languages: ['PHP'],
-            progress: 85,
+            progress: 62,
           ),
           SkillProgressJO(
             jop: 'Front-end Developer',

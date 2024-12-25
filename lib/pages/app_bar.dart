@@ -79,11 +79,7 @@ class AppBarWidgetJO extends StatelessWidget {
       child: BlocBuilder<AppBarJOBloc, AppBarJOState>(
         builder: (context, state) {
           // change in scroll
-          scrollController.addListener(() {
-            if (scrollController.offset > 500) {
-              BlocProvider.of<AppBarJOBloc>(context).add(AppBarScrollEvent(1));
-            }
-          });
+          scrollController.addListener(() {});
           return AppBar(
             toolbarHeight: preferredSize.height,
             automaticallyImplyLeading: false,

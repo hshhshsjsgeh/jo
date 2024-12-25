@@ -16,8 +16,12 @@ class WorksPageJO extends StatelessWidget {
         runSpacing: 20,
         children: [
           JOWorkCard(
-            image: Image.network(
-                'https://images.template.net/wp-content/uploads/2024/12/Personal-Website-Templates.png'),
+            images: [
+              Image.network(
+                  'https://images.template.net/wp-content/uploads/2024/12/Personal-Website-Templates.png'),
+              Image.network(
+                  'https://www.fotolip.com/wp-content/uploads/2016/05/Web-Templates-4.jpg'),
+            ],
             languages: ['Dart', 'Flutter'],
             title: 'Work 1',
             description: 'Description of work 1',
@@ -29,19 +33,38 @@ class WorksPageJO extends StatelessWidget {
   }
 }
 
-class JOWorkCard extends StatelessWidget {
+class JOWorkCard extends StatefulWidget {
   const JOWorkCard({
     super.key,
-    required this.image,
+    required this.images,
     required this.languages,
     required this.title,
     required this.link,
     this.description = '',
   });
 
-  final Image image;
+  final List<Image> images;
   final List<String> languages;
   final String title, description, link;
+
+  @override
+  State<JOWorkCard> createState() => _JOWorkCardState();
+}
+
+class _JOWorkCardState extends State<JOWorkCard> {
+  late final PageController _pageController;
+
+  @override
+  void initState() {
+    _pageController = PageController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +80,50 @@ class JOWorkCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            image,
+            ConstrainedBox(
+              constraints: BoxConstraints(maxHeight: 150),
+              child: Stack(
+                children: [
+                  PageView(
+                    controller: _pageController,
+                    children: List.generate(
+                      widget.images.length,
+                      (index) {
+                        return FittedBox(
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topCenter,
+                          child: widget.images[index],
+                        );
+                      },
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 5),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 2.5,
+                        children: List.generate(
+                          widget.images.length,
+                          (index) {
+                            return TextIconButtonJO(
+                              onPressed: () {
+                                _pageController.jumpToPage(index);
+                              },
+                              icon: Icons.square_sharp,
+                              label: '',
+                              iconSize: 10,
+                              only: TextIconButtonOnlyJO.iconOnly,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -70,7 +136,7 @@ class JOWorkCard extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  for (final language in languages) Text('$language '),
+                  for (final language in widget.languages) Text('$language '),
                 ],
               ),
             ),
@@ -80,14 +146,14 @@ class JOWorkCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    widget.title,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
                   ),
-                  Text(description),
+                  Text(widget.description),
                   const SizedBox(height: 10),
                   TextIconButtonJO.outlined(
                     icon: Icons.open_in_new,
