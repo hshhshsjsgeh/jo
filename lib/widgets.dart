@@ -199,18 +199,15 @@ class _TextIconButtonWidgetJOState extends State<TextIconButtonWidgetJO> {
       child: MouseRegion(
         cursor: widget.cursor ?? SystemMouseCursors.click,
         child: GestureDetector(
-          onTapDown: (details) {
+          onPanDown: (details) {
             onHover(true);
+            widget.onPressed!();
           },
-          onTapCancel: () {
+          onPanCancel: () {
             onHover(false);
           },
           child: TextButton(
-            onPressed: (widget.onPressed != null)
-                ? () {
-                    widget.onPressed!();
-                  }
-                : () {},
+            onPressed: () {},
             onHover: (value) {
               onHover(value);
             },
@@ -243,8 +240,14 @@ class _TextIconButtonWidgetJOState extends State<TextIconButtonWidgetJO> {
                   ...(widget.only == TextIconButtonOnlyJO.normal ||
                           widget.only == TextIconButtonOnlyJO.textOnly)
                       ? [
-                          Text(' ',
-                              style: TextStyle(fontSize: widget.textSize)),
+                          ...(widget.only == TextIconButtonOnlyJO.textOnly)
+                              ? []
+                              : [
+                                  Text(
+                                    ' ',
+                                    style: TextStyle(fontSize: widget.textSize),
+                                  ),
+                                ],
                           Text(
                             widget.label,
                             style: TextStyle(

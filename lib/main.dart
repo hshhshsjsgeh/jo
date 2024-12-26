@@ -13,7 +13,7 @@ part './widgets.dart';
 
 final ScrollController scrollController = ScrollController();
 
-List<String> pages = ['works', 'skills', 'about me', 'contact me'];
+List<String> pages = ['works', 'skills', 'about me'];
 
 List<GlobalKey> pagesKeys = List.generate(
   pages.length,
@@ -86,12 +86,11 @@ class _MyAppJOState extends State<MyAppJO> {
               child: Column(
                 children: [
                   HomePageJO(),
-                  LineSeparatorPagesJO(key: pagesKeys[0], 'works'),
+                  LineSeparatorPagesJO(key: pagesKeys[0], pages[0]),
                   WorksPageJO(),
-                  LineSeparatorPagesJO(key: pagesKeys[1], 'skills'),
+                  LineSeparatorPagesJO(key: pagesKeys[1], pages[1]),
                   SkillsPageJO(),
-                  LineSeparatorPagesJO(key: pagesKeys[2], 'about me'),
-                  LineSeparatorPagesJO(key: pagesKeys[3], 'contact me'),
+                  LineSeparatorPagesJO(key: pagesKeys[2], pages[2]),
                 ],
               ),
             ),

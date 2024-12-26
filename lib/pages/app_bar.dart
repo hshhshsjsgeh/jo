@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -392,39 +394,151 @@ class JOFloatingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: (MediaQuery.sizeOf(context).width < mobileSizeJO.width)
-          ? false
-          : true,
-      child: SizedBox(
-        width: 60,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CustomPaint(
-              size: const Size(1, 50),
-              painter: LineJOFloatingActionButtonCustomPainter(),
-            ),
-            ...List.generate(
-              icons.length,
-              (index) => Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    child: Icon(
-                      color: Theme.of(context)
-                          .floatingActionButtonTheme
-                          .foregroundColor,
-                      icons.keys.toList()[index],
-                    ),
+    return BlocProvider(
+      create: (context) => FloatingMessengerBarJOBloc(),
+      child:
+          BlocBuilder<FloatingMessengerBarJOBloc, FloatingMessengerBarJOState>(
+        builder: (context, state) {
+          bool toggled =
+              BlocProvider.of<FloatingMessengerBarJOBloc>(context).toggled ??
+                  false;
+
+          return Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  right: 10,
+                  bottom: 10,
+                ),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: TextIconButtonJO.outlined(
+                    onPressed: () {
+                      BlocProvider.of<FloatingMessengerBarJOBloc>(
+                        context,
+                        listen: false,
+                      ).add(FloatingMessengerToggleBarJOEvent());
+                    },
+                    icon: Icons.message_sharp,
+                    label: '',
+                    only: TextIconButtonOnlyJO.iconOnly,
+                    activated: toggled,
                   ),
                 ),
               ),
+              FloatingMessengerBarWidgetJO(
+                MediaQuery.sizeOf(context).width,
+                400,
+                padding: EdgeInsets.symmetric(
+                  vertical: 65,
+                  horizontal: 65,
+                ),
+                visible: toggled,
+              ),
+              Visibility(
+                visible: (MediaQuery.sizeOf(context).width < mobileSizeJO.width)
+                    ? false
+                    : true,
+                child: SizedBox(
+                  width: 60,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CustomPaint(
+                        size: const Size(1, 50),
+                        painter: LineJOFloatingActionButtonCustomPainter(),
+                      ),
+                      ...List.generate(
+                        icons.length,
+                        (index) => Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                              child: Icon(
+                                color: Theme.of(context)
+                                    .floatingActionButtonTheme
+                                    .foregroundColor,
+                                icons.keys.toList()[index],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class FloatingMessengerBarWidgetJO extends StatelessWidget {
+  const FloatingMessengerBarWidgetJO(
+    this.width,
+    this.height, {
+    super.key,
+    this.padding = EdgeInsets.zero,
+    this.visible = false,
+  });
+
+  final double width, height;
+  final EdgeInsets padding;
+  final bool visible;
+
+  @override
+  Widget build(BuildContext context) {
+    return Visibility(
+      visible: visible,
+      child: Align(
+        alignment: Alignment.bottomRight,
+        child: Container(
+          width: width - (padding.right + padding.left),
+          height: height - (padding.top + padding.bottom),
+          decoration: BoxDecoration(
+            border: Border.all(color: Theme.of(context).colorScheme.secondary),
+          ),
+          margin: padding,
+          child: ClipRect(
+            clipper: FloatingMessengerBarJOClipper(
+              width - (padding.right + padding.left),
+              height - (padding.top + padding.bottom),
             ),
-          ],
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Center(child: Text('\$ soon')),
+            ),
+          ),
         ),
       ),
     );
   }
+}
+
+class FloatingMessengerBarJOClipper extends CustomClipper<Rect> {
+  final double width, height;
+  final EdgeInsets padding;
+
+  const FloatingMessengerBarJOClipper(
+    this.width,
+    this.height, {
+    this.padding = EdgeInsets.zero,
+  });
+
+  @override
+  Rect getClip(Size size) {
+    return Rect.fromLTWH(
+      0 + padding.left,
+      0 + padding.top,
+      width - (padding.left + padding.right + 2),
+      height - (padding.top + padding.bottom + 2),
+    );
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Rect> oldClipper) => true;
 }
